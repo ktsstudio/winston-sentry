@@ -51,7 +51,9 @@ module.exports = class SentryTransport extends Transport {
 
     this._sentry.withScope(scope => {
       scope.setLevel(this._levelsMap[level]);
-      scope.setExtra('context', context);
+      for (const key in context) {
+        scope.setExtra(key, context[key]);
+      }
       this._sentry.captureMessage(msg);
       next(null, true);
     });
